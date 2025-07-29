@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Timeline Workbook</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab {
+            padding: 15px 25px;
+            background: #ecf0f1;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .tab:hover {
+            background: #2980b9;
+            color: white;
+        }
+
+        .worksheet {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .worksheet.active {
+            display: block;
+        }
+
+        .project-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .initiatives-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .initiatives-table th,
+        .initiatives-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            min-width: 120px;
+        }
+
+        .initiatives-table th {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+
+        .initiatives-table td:first-child {
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .initiatives-table td:nth-child(5),
+        .initiatives-table td:nth-child(7) {
+            min-width: 180px;
+            font-size: 13px;
+        }
+
+        .initiatives-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .initiatives-table tr:hover {
+            background: #e3f2fd;
+        }
+
+        .initiatives-table input,
+        .initiatives-table select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .status-overdue {
+            background-color: #ffebee !important;
+            color: #c62828;
+        }
+
+        .status-due-soon {
+            background-color: #fff3e0 !important;
+            color: #ef6c00;
+        }
+
+        .status-completed {
+            background-color: #e8f5e8 !important;
+            color: #2e7d32;
+        }
+
+        .calculate-btn {
+            background: #27ae60;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            background: #229954;
+        }
+
+        .holiday-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .holiday-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .export-btn {
+            background: #8e44ad;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        .export-btn:hover {
+            background: #7d3c98;
+        }
+
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .add-initiative {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .add-initiative input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+        }
+
+        .add-btn {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-btn:hover {
+            background: #229954;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Marketing Timeline Workbook</h1>
+            <p>Comprehensive auction marketing timeline management system</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showWorksheet('entry')">Entry Worksheet</button>
+            <button class="tab" onclick="showWorksheet('timeline')">Timeline</button>
+            <button class="tab" onclick="showWorksheet('static')">Static Timeline</button>
+            <button class="tab" onclick="showWorksheet('reference')">Reference Data</button>
+        </div>
+
+        <!-- Entry Worksheet -->
+        <div id="entry" class="worksheet active">
+            <h2>Project Entry & Configuration</h2>
+            
+            <div class="project-info">
+                <div class="form-group">
+                    <label for="projectName">Project Name:</label>
+                    <input type="text" id="projectName" placeholder="Enter project name">
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Description:</label>
+                    <input type="text" id="projectDescription" placeholder="Project description">
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="closeDate">Close Date:</label>
+                    <input type="date" id="closeDate">
+                </div>
+                <div class="form-group">
+                    <label for="excludeWeekends">Exclude Weekends:</label>
+                    <select id="excludeWeekends">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="excludeHolidays">Exclude Holidays:</label>
+                    <select id="excludeHolidays">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="projectManager">Project Manager:</label>
+                    <input type="text" id="projectManager" placeholder="Manager name">
+                </div>
+                <div class="form-group">
+                    <label>Last Updated:</label>
+                    <input type="text" id="lastUpdated" readonly>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateTimeline()">Calculate Timeline</button>
+            <button class="export-btn" onclick="testDay0Logic()">Test Day 0 Logic</button>
+            <button class="export-btn" onclick="debugCalculations()">Debug Calculations</button>
+            
+            <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #27ae60;">💡 Day 0 Logic Explanation:</h4>
+                <p style="margin: 0; color: #2c3e50;">
+                    <strong>Close Date = Day 0:</strong> The auction closing date is considered Day 0. Items with -1 days will be scheduled for the day before the close date, -2 days for two days before, etc. The system first calculates using calendar days, then adjusts to business days if weekend/holiday exclusions are enabled.
+                </p>
+                <p style="margin: 10px 0 0 0; color: #2c3e50; font-size: 12px;">
+                    <strong>Example:</strong> If close date is Tuesday 8/26/25:<br>
+                    • Day 0 = Tuesday 8/26/25 (close date)<br>
+                    • Day -1 = Monday 8/25/25 (24-hour reminder)<br>
+                    • Day -34 = Wednesday 7/23/25 (34 calendar days before)<br>
+                    <em>Note: If weekend exclusions are enabled and a calculated date falls on a weekend, it's automatically moved to the nearest business day.</em>
+                </p>
+            </div>
+
+            <div class="table-container">
+                <table class="initiatives-table">
+                    <thead>
+                        <tr>
+                            <th>Initiative Name</th>
+                            <th>Active</th>
+                            <th>Days (+/-)</th>
+                            <th>Reference Point</th>
+                            <th>Dependency Initiative</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="entryTableBody">
+                        <!-- Initiatives will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="add-initiative">
+                <input type="text" id="newInitiative" placeholder="Add new initiative...">
+                <button class="add-btn" onclick="addNewInitiative()">Add Initiative</button>
+            </div>
+        </div>
+
+        <!-- Timeline Worksheet -->
+        <div id="timeline" class="worksheet">
+            <h2>Calculated Timeline</h2>
+            
+            <div class="summary-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTasks">0</div>
+                    <div>Total Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="activeTasks">0</div>
+                    <div>Active Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedTasks">0</div>
+                    <div>Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="overdueTasks">0</div>
+                    <div>Overdue</div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="initiatives-table">
+                    <thead>
+                        <tr>
+                            <th>Initiative Name</th>
+                            <th>Active</th>
+                            <th>Days</th>
+                            <th>Reference Point</th>
+                            <th>Calculated Date</th>
+                            <th>Manual Override</th>
+                            <th>Final Date</th>
+                            <th>Completed</th>
+                            <th>Completion Date</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timelineTableBody">
+                        <!-- Timeline will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+                <button class="export-btn" onclick="printTimeline()">Print Timeline</button>
+            </div>
+        </div>
+
+        <!-- Static Timeline Worksheet -->
+        <div id="static" class="worksheet">
+            <h2>Static Timeline Template</h2>
+            <p>Use this section to manage your initiative templates and sorting preferences.</p>
+            
+            <div class="add-initiative">
+                <input type="text" id="templateName" placeholder="Template initiative name...">
+                <input type="number" id="templateDays" placeholder="Default days" style="width: 120px;">
+                <select id="templateReference" style="width: 150px;">
+                    <option value="Start Date">Start Date</option>
+                    <option value="Close Date">Close Date</option>
+                    <option value="Other Initiative">Other Initiative</option>
+                </select>
+                <button class="add-btn" onclick="addTemplate()">Add Template</button>
+            </div>
+
+            <div class="table-container">
+                <table class="initiatives-table">
+                    <thead>
+                        <tr>
+                            <th>Template Name</th>
+                            <th>Default Days</th>
+                            <th>Default Reference</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staticTableBody">
+                        <!-- Static templates will be populated -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reference Data Worksheet -->
+        <div id="reference" class="worksheet">
+            <h2>Reference Data & Configuration</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <h3>Holiday Calendar 2024-2025</h3>
+                    <div class="holiday-list" id="holidayList">
+                        <!-- Holidays will be populated -->
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>Default Values</h3>
+                    <div class="table-container">
+                        <table class="initiatives-table">
+                            <thead>
+                                <tr>
+                                    <th>Initiative Type</th>
+                                    <th>Default Days</th>
+                                </tr>
+                            </thead>
+                            <tbody id="defaultsTable">
+                                <!-- Default values will be populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global data storage
+        let projectData = {
+            initiatives: [],
+            holidays: [],
+            defaults: {},
+            templates: []
+        };
+
+        // Initialize the application
+        function initializeApp() {
+            // Set current date
+            document.getElementById('lastUpdated').value = new Date().toLocaleDateString();
+            
+            // Load default initiatives
+            loadDefaultInitiatives();
+            
+            // Load holidays
+            loadHolidays();
+            
+            // Load default values
+            loadDefaults();
+            
+            // Populate tables
+            populateEntryTable();
+            populateHolidays();
+            populateDefaults();
+        }
+
+        function loadDefaultInitiatives() {
+            const initiatives = [
+                "AUCTION CLOSING DATE (DAY 0)",
+                "Identify Unique Vendors for Marketing Purposes",
+                "Receive Best Images from Sale Manager",
+                "Create Collage Photo for Auction Main Image",
+                "Create Website Slider Image",
+                "Draft Flyer Design (Print and/or Social)",
+                "Upload and Catalog Images to Website",
+                "Ensure Auction URL is Updated in Canned Responses",
+                "Update Auction URL in Linktree",
+                "Create UTM for Richter",
+                "Sale Manager to Review & Approve Flyer Design",
+                "Finalize, Post and Save Flyer Design to Social Media and Google Drive",
+                "Upload Videos to YouTube & Auction Lots",
+                "Draft 1st Auction Coming Soon eBlast",
+                "Sale Manager to Review & Approve 1st Auction Coming Soon eBlast",
+                "Draft Meta Ad",
+                "Finalize & Send 1st Auction Coming Soon eBlast",
+                "Reach out To Richter - FB Marketing Place & Craigslist",
+                "Create & Activate Identified Vendor Listings",
+                "Draft Reddit Ads",
+                "Draft Google Ads - Search & Display",
+                "Sale Manager to Review & Approve Meta Ad",
+                "Post Meta Ad to Instagram/Facebook Page",
+                "Launch Google Ads",
+                "Finalize & Launch Reddit Ad",
+                "Finalize & Launch Meta Ad",
+                "Contact Vendors & Verify Listings are Active",
+                "Draft Auction Preview Reminder eBlast & SMS",
+                "Sale Manager to Review & Approve Auction Preview Reminder eBlast",
+                "Draft Auction 24 Hour Reminder eBlast",
+                "Draft 24 Hour Auction Reminder SMS & 1 Hour Final Reminder SMS",
+                "Sale Manager to Review & Approve Auction 24 Hour Reminder eBlast",
+                "Add Prospects & Registered Bidders to Mailchimp (Preview Reminder)",
+                "Finalize & Send Auction Preview Reminder eBlast",
+                "Add Prospects & Registered Bidders to SMS Platform (Preview Reminder)",
+                "Finalize & Send Preview Reminder SMS",
+                "Add Prospects & Registered Bidders to Mailchimp (24 Hour Reminder)",
+                "Send Auction 24 Hour Reminder eBlast",
+                "Add Prospects & Registered Bidders to SMS Platform (24 Hour Reminder)",
+                "Send Auction 24 Hour Reminder SMS",
+                "Add Prospects & Registered Bidders to SMS Platform (1 Hour Reminder)",
+                "Schedule Final SMS Reminder for 1 Hour Prior to Auction Closing",
+                "Delete all Campaigns or Listing from Outsourced Vendors",
+                "Linktree URL archived",
+                "Upload all Auction Registrations to MailChimp and Tag Appropriately",
+                "Run Marketing Reports & Pull Analytics From All Vendors",
+                "Update Auction Tracker with Campaign Results",
+                "Draft Post-Auction Report & Send to Sale Manager",
+                "Sale Manager to Approve Post-Auction Report",
+                "Sale Manager to Send Post-Auction Report to Seller",
+                "Upload Post-Auction Report to Google Drive"
+            ];
+
+            const defaultDays = [
+                0, -34, -32, -29, -29, -29, -29, -29, -29, -29, -28, -28, -28, -28, -27, -27, -26, -25, -25, -25, -25, -25, -22, -21, -15, -15, -14, -8, -7, -6, -6, -4, -4, -4, -4, -4, -1, -1, -1, -1, 0, 0, 1, 1, 1, 3, 3, 6, 7, 7, 8
+            ];
+
+            projectData.initiatives = initiatives.map((name, index) => ({
+                name: name,
+                active: 'yes',
+                days: index < defaultDays.length ? defaultDays[index] : -7,
+                reference: 'Close Date',
+                dependency: '',
+                notes: '',
+                completed: false,
+                completionDate: '',
+                manualOverride: '',
+                calculatedDate: ''
+            }));
+        }
+
+        function loadHolidays() {
+            projectData.holidays = [
+                { date: '2024-01-01', name: "New Year's Day" },
+                { date: '2024-01-15', name: "Martin Luther King Jr. Day" },
+                { date: '2024-02-19', name: "Presidents' Day" },
+                { date: '2024-05-27', name: "Memorial Day" },
+                { date: '2024-06-19', name: "Juneteenth" },
+                { date: '2024-07-04', name: "Independence Day" },
+                { date: '2024-09-02', name: "Labor Day" },
+                { date: '2024-10-14', name: "Columbus Day" },
+                { date: '2024-11-11', name: "Veterans Day" },
+                { date: '2024-11-28', name: "Thanksgiving Day" },
+                { date: '2024-12-25', name: "Christmas Day" },
+                { date: '2025-01-01', name: "New Year's Day" },
+                { date: '2025-01-20', name: "Martin Luther King Jr. Day" },
+                { date: '2025-02-17', name: "Presidents' Day" },
+                { date: '2025-05-26', name: "Memorial Day" },
+                { date: '2025-06-19', name: "Juneteenth" },
+                { date: '2025-07-04', name: "Independence Day" },
+                { date: '2025-09-01', name: "Labor Day" },
+                { date: '2025-10-13', name: "Columbus Day" },
+                { date: '2025-11-11', name: "Veterans Day" },
+                { date: '2025-11-27', name: "Thanksgiving Day" },
+                { date: '2025-12-25', name: "Christmas Day" }
+            ];
+        }
+
+        function loadDefaults() {
+            projectData.defaults = {
+                'Create Content': -14,
+                'Review & Approval': -2,
+                'Email Campaign': -7,
+                'Social Media Post': -3,
+                'Report Generation': 2,
+                'Administrative Task': -1,
+                'Setup Task': -10,
+                'Launch Task': -1,
+                'Follow-up Task': 1
+            };
+        }
+
+        function showWorksheet(sheetName) {
+            // Hide all worksheets
+            document.querySelectorAll('.worksheet').forEach(ws => ws.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected worksheet
+            document.getElementById(sheetName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateEntryTable() {
+            const tbody = document.getElementById('entryTableBody');
+            tbody.innerHTML = '';
+
+            projectData.initiatives.forEach((initiative, index) => {
+                const row = tbody.insertRow();
+                
+                // Special styling for closing date
+                if (initiative.name.includes('AUCTION CLOSING DATE')) {
+                    row.style.backgroundColor = '#e3f2fd';
+                    row.style.fontWeight = 'bold';
+                    row.style.border = '2px solid #1976d2';
+                }
+                
+                // Initiative Name
+                const nameCell = row.insertCell();
+                nameCell.textContent = initiative.name;
+                if (initiative.name.includes('AUCTION CLOSING DATE')) {
+                    nameCell.style.fontWeight = 'bold';
+                    nameCell.style.color = '#1976d2';
+                } else {
+                    nameCell.style.fontWeight = 'bold';
+                }
+                
+                // Active
+                const activeCell = row.insertCell();
+                const activeSelect = document.createElement('select');
+                activeSelect.innerHTML = '<option value="yes">Yes</option><option value="no">No</option>';
+                activeSelect.value = initiative.active;
+                activeSelect.onchange = () => updateInitiative(index, 'active', activeSelect.value);
+                activeCell.appendChild(activeSelect);
+                
+                // Days
+                const daysCell = row.insertCell();
+                const daysInput = document.createElement('input');
+                daysInput.type = 'number';
+                daysInput.value = initiative.days;
+                daysInput.onchange = () => updateInitiative(index, 'days', parseInt(daysInput.value));
+                if (initiative.name.includes('AUCTION CLOSING DATE')) {
+                    daysInput.readOnly = true;
+                    daysInput.style.backgroundColor = '#f5f5f5';
+                }
+                daysCell.appendChild(daysInput);
+                
+                // Reference Point
+                const refCell = row.insertCell();
+                const refSelect = document.createElement('select');
+                refSelect.innerHTML = `
+                    <option value="Start Date">Start Date</option>
+                    <option value="Close Date">Close Date</option>
+                    <option value="Other Initiative">Other Initiative</option>
+                `;
+                refSelect.value = initiative.reference;
+                refSelect.onchange = () => updateInitiative(index, 'reference', refSelect.value);
+                if (initiative.name.includes('AUCTION CLOSING DATE')) {
+                    refSelect.disabled = true;
+                    refSelect.style.backgroundColor = '#f5f5f5';
+                }
+                refCell.appendChild(refSelect);
+                
+                // Dependency
+                const depCell = row.insertCell();
+                const depSelect = document.createElement('select');
+                depSelect.innerHTML = '<option value="">None</option>';
+                projectData.initiatives.forEach((dep, depIndex) => {
+                    if (depIndex !== index) {
+                        depSelect.innerHTML += `<option value="${dep.name}">${dep.name}</option>`;
+                    }
+                });
+                depSelect.value = initiative.dependency;
+                depSelect.onchange = () => updateInitiative(index, 'dependency', depSelect.value);
+                depCell.appendChild(depSelect);
+                
+                // Notes
+                const notesCell = row.insertCell();
+                const notesInput = document.createElement('input');
+                notesInput.type = 'text';
+                notesInput.value = initiative.notes;
+                notesInput.onchange = () => updateInitiative(index, 'notes', notesInput.value);
+                notesCell.appendChild(notesInput);
+            });
+        }
+
+        function updateInitiative(index, field, value) {
+            projectData.initiatives[index][field] = value;
+        }
+
+        function addNewInitiative() {
+            const nameInput = document.getElementById('newInitiative');
+            const name = nameInput.value.trim();
+            
+            if (name) {
+                projectData.initiatives.push({
+                    name: name,
+                    active: 'yes',
+                    days: -7,
+                    reference: 'Close Date',
+                    dependency: '',
+                    notes: '',
+                    completed: false,
+                    completionDate: '',
+                    manualOverride: '',
+                    calculatedDate: ''
+                });
+                
+                nameInput.value = '';
+                populateEntryTable();
+                populateTimelineTable();
+            }
+        }
+
+        function calculateTimeline() {
+            const startDateValue = document.getElementById('startDate').value;
+            const closeDateValue = document.getElementById('closeDate').value;
+            const excludeWeekends = document.getElementById('excludeWeekends').value === 'yes';
+            const excludeHolidays = document.getElementById('excludeHolidays').value === 'yes';
+
+            if (!startDateValue || !closeDateValue) {
+                alert('Please enter both start and close dates');
+                return;
+            }
+
+            // Create dates at local midnight to avoid timezone issues
+            const startDate = new Date(startDateValue + 'T00:00:00');
+            const closeDate = new Date(closeDateValue + 'T00:00:00');
+
+            projectData.initiatives.forEach(initiative => {
+                if (initiative.active === 'no') {
+                    initiative.calculatedDate = '';
+                    return;
+                }
+
+                let referenceDate;
+                
+                if (initiative.reference === 'Start Date') {
+                    referenceDate = new Date(startDate);
+                } else if (initiative.reference === 'Close Date') {
+                    referenceDate = new Date(closeDate);
+                } else if (initiative.reference === 'Other Initiative' && initiative.dependency) {
+                    const depInitiative = projectData.initiatives.find(i => i.name === initiative.dependency);
+                    if (depInitiative && depInitiative.calculatedDate) {
+                        referenceDate = new Date(depInitiative.calculatedDate + 'T00:00:00');
+                    } else {
+                        initiative.calculatedDate = 'Dependency not calculated';
+                        return;
+                    }
+                } else {
+                    initiative.calculatedDate = 'Invalid reference';
+                    return;
+                }
+
+                const calculatedDate = addBusinessDays(referenceDate, initiative.days, excludeWeekends, excludeHolidays);
+                initiative.calculatedDate = calculatedDate.toISOString().split('T')[0];
+            });
+
+            populateTimelineTable();
+            updateStats();
+            
+            // Automatically switch to Timeline tab to show results
+            showWorksheet('timeline');
+        }
+
+        function addBusinessDays(date, days, excludeWeekends, excludeHolidays) {
+            const result = new Date(date);
+            const holidays = excludeHolidays ? projectData.holidays.map(h => h.date) : [];
+            
+            // If days is 0, return the reference date as-is (Day 0 logic)
+            if (days === 0) {
+                return result;
+            }
+            
+            // First, add the calendar days
+            result.setDate(result.getDate() + days);
+            
+            // Then, if exclusions are enabled and the result falls on weekend/holiday,
+            // adjust to the previous business day (for negative days) or next business day (for positive days)
+            if (excludeWeekends || excludeHolidays) {
+                const direction = days < 0 ? -1 : 1; // Go backwards for past dates, forwards for future dates
+                
+                while (true) {
+                    const isWeekend = excludeWeekends && (result.getDay() === 0 || result.getDay() === 6);
+                    const isHoliday = excludeHolidays && holidays.includes(result.toISOString().split('T')[0]);
+                    
+                    if (!isWeekend && !isHoliday) {
+                        break; // Found a business day
+                    }
+                    
+                    result.setDate(result.getDate() + direction);
+                }
+            }
+            
+            return result;
+        }
+
+        function formatDateWithDay(dateString) {
+            if (!dateString) return '';
+            
+            // Create date at local midnight to avoid timezone issues
+            const date = new Date(dateString + 'T00:00:00');
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dayName = dayNames[date.getDay()];
+            
+            // Format as MM/DD/YYYY (DayName)
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const year = date.getFullYear();
+            
+            return `${month}/${day}/${year} (${dayName})`;
+        }
+
+        function populateTimelineTable() {
+            const tbody = document.getElementById('timelineTableBody');
+            tbody.innerHTML = '';
+            
+            const today = new Date().toISOString().split('T')[0];
+
+            // Sort initiatives by calculated date for chronological order
+            const sortedInitiatives = [...projectData.initiatives].sort((a, b) => {
+                const dateA = a.calculatedDate || '9999-12-31';
+                const dateB = b.calculatedDate || '9999-12-31';
+                return dateA.localeCompare(dateB);
+            });
+
+            sortedInitiatives.forEach((initiative) => {
+                const row = tbody.insertRow();
+                
+                // Find original index for updates
+                const originalIndex = projectData.initiatives.findIndex(i => i.name === initiative.name);
+                
+                // Special styling for closing date
+                if (initiative.name.includes('AUCTION CLOSING DATE')) {
+                    row.style.backgroundColor = '#e3f2fd';
+                    row.style.fontWeight = 'bold';
+                    row.style.border = '2px solid #1976d2';
+                }
+                
+                // Apply status styling
+                if (initiative.completed) {
+                    if (!initiative.name.includes('AUCTION CLOSING DATE')) {
+                        row.classList.add('status-completed');
+                    }
+                } else if (initiative.calculatedDate && initiative.calculatedDate < today) {
+                    if (!initiative.name.includes('AUCTION CLOSING DATE')) {
+                        row.classList.add('status-overdue');
+                    }
+                } else if (initiative.calculatedDate) {
+                    const diffDays = Math.ceil((new Date(initiative.calculatedDate) - new Date(today)) / (1000 * 60 * 60 * 24));
+                    if (diffDays <= 7 && !initiative.name.includes('AUCTION CLOSING DATE')) {
+                        row.classList.add('status-due-soon');
+                    }
+                }
+                
+                // Initiative Name
+                const nameCell = row.insertCell();
+                nameCell.textContent = initiative.name;
+                if (initiative.name.includes('AUCTION CLOSING DATE')) {
+                    nameCell.style.color = '#1976d2';
+                    nameCell.style.fontWeight = 'bold';
+                }
+                
+                // Active
+                row.insertCell().textContent = initiative.active;
+                
+                // Days
+                row.insertCell().textContent = initiative.days;
+                
+                // Reference Point
+                row.insertCell().textContent = initiative.reference;
+                
+                // Calculated Date
+                const calcDateCell = row.insertCell();
+                calcDateCell.textContent = formatDateWithDay(initiative.calculatedDate);
+                if (initiative.name.includes('AUCTION CLOSING DATE')) {
+                    calcDateCell.style.fontWeight = 'bold';
+                    calcDateCell.style.color = '#1976d2';
+                }
+                calcDateCell.style.whiteSpace = 'nowrap';
+                
+                // Manual Override
+                const overrideCell = row.insertCell();
+                const overrideInput = document.createElement('input');
+                overrideInput.type = 'date';
+                overrideInput.value = initiative.manualOverride;
+                overrideInput.onchange = () => {
+                    projectData.initiatives[originalIndex].manualOverride = overrideInput.value;
+                    populateTimelineTable(); // Refresh to show updated final date with day
+                };
+                overrideCell.appendChild(overrideInput);
+                
+                // Final Date
+                const finalDate = initiative.manualOverride || initiative.calculatedDate;
+                const finalDateCell = row.insertCell();
+                finalDateCell.textContent = formatDateWithDay(finalDate);
+                if (initiative.name.includes('AUCTION CLOSING DATE')) {
+                    finalDateCell.style.fontWeight = 'bold';
+                    finalDateCell.style.color = '#1976d2';
+                }
+                finalDateCell.style.whiteSpace = 'nowrap';
+                
+                // Completed
+                const completedCell = row.insertCell();
+                const completedCheckbox = document.createElement('input');
+                completedCheckbox.type = 'checkbox';
+                completedCheckbox.checked = initiative.completed;
+                completedCheckbox.onchange = () => {
+                    projectData.initiatives[originalIndex].completed = completedCheckbox.checked;
+                    if (completedCheckbox.checked) {
+                        projectData.initiatives[originalIndex].completionDate = today;
+                    } else {
+                        projectData.initiatives[originalIndex].completionDate = '';
+                    }
+                    populateTimelineTable();
+                    updateStats();
+                };
+                completedCell.appendChild(completedCheckbox);
+                
+                // Completion Date
+                row.insertCell().textContent = initiative.completionDate;
+                
+                // Notes
+                row.insertCell().textContent = initiative.notes;
+            });
+        }
+
+        function updateStats() {
+            const total = projectData.initiatives.length;
+            const active = projectData.initiatives.filter(i => i.active === 'yes').length;
+            const completed = projectData.initiatives.filter(i => i.completed).length;
+            const today = new Date().toISOString().split('T')[0];
+            const overdue = projectData.initiatives.filter(i => 
+                !i.completed && i.calculatedDate && i.calculatedDate < today
+            ).length;
+
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('activeTasks').textContent = active;
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('overdueTasks').textContent = overdue;
+        }
+
+        function populateHolidays() {
+            const container = document.getElementById('holidayList');
+            container.innerHTML = '';
+            
+            projectData.holidays.forEach(holiday => {
+                const div = document.createElement('div');
+                div.className = 'holiday-item';
+                div.innerHTML = `<strong>${holiday.name}</strong><br>${holiday.date}`;
+                container.appendChild(div);
+            });
+        }
+
+        function populateDefaults() {
+            const tbody = document.getElementById('defaultsTable');
+            tbody.innerHTML = '';
+            
+            Object.entries(projectData.defaults).forEach(([type, days]) => {
+                const row = tbody.insertRow();
+                row.insertCell().textContent = type;
+                row.insertCell().textContent = days;
+            });
+        }
+
+        function debugCalculations() {
+            const startDateValue = document.getElementById('startDate').value;
+            const closeDateValue = document.getElementById('closeDate').value;
+            const excludeWeekends = document.getElementById('excludeWeekends').value === 'yes';
+            const excludeHolidays = document.getElementById('excludeHolidays').value === 'yes';
+
+            if (!startDateValue || !closeDateValue) {
+                alert('Please enter both start and close dates first');
+                return;
+            }
+
+            const closeDate = new Date(closeDateValue + 'T00:00:00');
+
+            // Test specific calculations including the problematic -34 days
+            const testCases = [
+                { days: 0, desc: "Day 0 (Close Date)" },
+                { days: -1, desc: "Day -1 (1 day before)" },
+                { days: -7, desc: "Day -7 (1 week before)" },
+                { days: -34, desc: "Day -34 (should be 7/23/2025)" }
+            ];
+
+            let debugInfo = `DEBUG: Business Day Calculations\n\n`;
+            debugInfo += `Close Date: ${formatDateWithDay(closeDateValue)}\n`;
+            debugInfo += `Exclude Weekends: ${excludeWeekends}\n`;
+            debugInfo += `Exclude Holidays: ${excludeHolidays}\n\n`;
+
+            testCases.forEach(testCase => {
+                const result = addBusinessDays(closeDate, testCase.days, excludeWeekends, excludeHolidays);
+                const resultStr = result.toISOString().split('T')[0];
+                
+                // Calculate actual days difference for verification
+                const daysDiff = Math.round((closeDate - result) / (1000 * 60 * 60 * 24));
+                debugInfo += `${testCase.desc}: ${formatDateWithDay(resultStr)} (${daysDiff} days difference)\n`;
+            });
+
+            // Test simple calendar math
+            const simpleTest = new Date(closeDate);
+            simpleTest.setDate(simpleTest.getDate() - 34);
+            debugInfo += `\nSimple Calendar Math (-34 days): ${formatDateWithDay(simpleTest.toISOString().split('T')[0])}\n`;
+
+            alert(debugInfo);
+        }
+
+        function testDay0Logic() {
+            // Set test dates - Tuesday 8/26/25 as close date
+            document.getElementById('startDate').value = '2025-08-20';
+            document.getElementById('closeDate').value = '2025-08-26';
+            document.getElementById('excludeWeekends').value = 'no'; // Start with no exclusions for testing
+            document.getElementById('excludeHolidays').value = 'no';
+            
+            // Test by adding a few specific test items including the problematic -34
+            const testItems = [
+                { name: "TEST: 34 Days Before (Day -34)", days: -34, reference: "Close Date" },
+                { name: "TEST: 7 Days Before (Day -7)", days: -7, reference: "Close Date" },
+                { name: "TEST: 24 Hour Reminder (Day -1)", days: -1, reference: "Close Date" },
+                { name: "TEST: Day After Close (Day +1)", days: 1, reference: "Close Date" }
+            ];
+            
+            // Add test items temporarily
+            testItems.forEach(item => {
+                projectData.initiatives.push({
+                    name: item.name,
+                    active: 'yes',
+                    days: item.days,
+                    reference: item.reference,
+                    dependency: '',
+                    notes: 'Test item - can be deleted after verification',
+                    completed: false,
+                    completionDate: '',
+                    manualOverride: '',
+                    calculatedDate: ''
+                });
+            });
+            
+            // Refresh tables and calculate
+            populateEntryTable();
+            calculateTimeline();
+            
+            // Show results with expected dates
+            alert(`✅ Day 0 Logic Test Results:\n\n` +
+                  `Close Date: 8/26/25 (Tuesday) = Day 0\n\n` +
+                  `EXPECTED RESULTS (no weekend exclusions):\n` +
+                  `• Day -34: Should be 7/23/25 (Wednesday)\n` +
+                  `• Day -7: Should be 8/19/25 (Tuesday)\n` +
+                  `• Day -1: Should be 8/25/25 (Monday)\n` +
+                  `• Day +1: Should be 8/27/25 (Wednesday)\n\n` +
+                  `Check the Timeline tab to verify these calculations!\n` +
+                  `Then try enabling "Exclude Weekends" to test business day adjustments.`);
+        }
+
+        function exportToCSV() {
+            let csv = 'Initiative Name,Active,Days,Reference Point,Calculated Date,Manual Override,Final Date,Completed,Completion Date,Notes\n';
+            
+            projectData.initiatives.forEach(initiative => {
+                const finalDate = initiative.manualOverride || initiative.calculatedDate;
+                csv += `"${initiative.name}","${initiative.active}","${initiative.days}","${initiative.reference}","${initiative.calculatedDate}","${initiative.manualOverride}","${finalDate}","${initiative.completed}","${initiative.completionDate}","${initiative.notes}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'marketing_timeline.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function printTimeline() {
+            window.print();
+        }
+
+        function addTemplate() {
+            const name = document.getElementById('templateName').value.trim();
+            const days = parseInt(document.getElementById('templateDays').value) || -7;
+            const reference = document.getElementById('templateReference').value;
+            
+            if (name) {
+                projectData.templates.push({
+                    name: name,
+                    days: days,
+                    reference: reference,
+                    category: 'Custom',
+                    priority: 'Medium'
+                });
+                
+                document.getElementById('templateName').value = '';
+                document.getElementById('templateDays').value = '';
+                populateStaticTable();
+            }
+        }
+
+        function populateStaticTable() {
+            const tbody = document.getElementById('staticTableBody');
+            tbody.innerHTML = '';
+            
+            projectData.templates.forEach((template, index) => {
+                const row = tbody.insertRow();
+                row.insertCell().textContent = template.name;
+                row.insertCell().textContent = template.days;
+                row.insertCell().textContent = template.reference;
+                row.insertCell().textContent = template.category;
+                row.insertCell().textContent = template.priority;
+                
+                const actionsCell = row.insertCell();
+                const useBtn = document.createElement('button');
+                useBtn.textContent = 'Use Template';
+                useBtn.className = 'add-btn';
+                useBtn.onclick = () => useTemplate(index);
+                actionsCell.appendChild(useBtn);
+            });
+        }
+
+        function useTemplate(index) {
+            const template = projectData.templates[index];
+            projectData.initiatives.push({
+                name: template.name,
+                active: 'yes',
+                days: template.days,
+                reference: template.reference,
+                dependency: '',
+                notes: '',
+                completed: false,
+                completionDate: '',
+                manualOverride: '',
+                calculatedDate: ''
+            });
+            
+            populateEntryTable();
+            alert('Template added to initiatives!');
+        }
+
+        // Initialize the application when the page loads
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>
